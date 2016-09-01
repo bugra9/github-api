@@ -45,7 +45,7 @@ class Github {
 		);
 	}
 
-	public function commit($msg) {
+	public function commit($msg, $authorName = false, $authorEmail = false) {
 		// Store the SHA for the latest commit
 		$shaLatestCommit = $this->getData('git/refs/heads/'.$this->branch)->object;
 		
@@ -65,6 +65,12 @@ class Github {
 	        'parents' => array($shaLatestCommit),
 	        'tree' => $shaNewTree
 	    );
+	    if($authorName && $authorEmail)
+	    	$data['author'] = array(
+	    		'name' => $authorName,
+	    		'email' => $authorEmail,
+	    		'date' => date('c')
+	    	);
 		$shaNewCommit = $this->getData('git/commits', $data, 'POST')->sha;
 
 		// Update HEAD

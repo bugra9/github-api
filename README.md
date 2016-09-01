@@ -8,6 +8,7 @@ $gh = new Github('user', 'token', 'owner/repo/branch');
 $gh->add('path/fileName', 'file content');
 $gh->add('path/fileName', 'file content (base64 encoded)', false);
 $gh->commit("message");
+// $gh->commit("message", "Author Name", "Author Email");
 ```
 
 ### Javascript
@@ -15,5 +16,6 @@ $gh->commit("message");
 var gh = new Github('user', 'token', 'owner/repo/branch');
 gh.add('path/fileName', 'file content');
 gh.add('path/fileName', 'file content (base64 encoded)', false);
-gh.commit("message");
+gh.commit("message"); 
+// gh.commit("message", "Author Name", "Author Email");
 ```

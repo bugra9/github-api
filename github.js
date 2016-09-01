@@ -31,7 +31,7 @@ function Github(p1, p2, p3) {
     this.add = function(path, content, base64) {
         base64 = typeof base64 !== 'undefined' ?  base64 : true;
         if(base64)
-            content = window.btoa(content);
+            content = window.btoa(unescape(encodeURIComponent(content)));
         var data = {
             'content': content,
             'encoding': "base64"
@@ -44,7 +44,9 @@ function Github(p1, p2, p3) {
         });
     };
 
-    this.commit = function(msg) {
+    this.commit = function(msg, authorName, authorEmail) {
+        authorName = typeof authorName !== 'undefined' ?  authorName : false;
+        authorEmail = typeof authorEmail !== 'undefined' ?  authorEmail : false;
         // Store the SHA for the latest commit
         var shaLatestCommit = this.getData('git/refs/heads/'+this.branch).object;
 
@@ -64,6 +66,12 @@ function Github(p1, p2, p3) {
             'parents': [shaLatestCommit],
             'tree': shaNewTree
         };
+        if(authorName && authorEmail)
+            data.author = {
+                'name': authorName,
+                'email': authorEmail,
+                'date': (new Date()).toISOString()
+            };
         var shaNewCommit = this.getData('git/commits', data, 'POST').sha;
 
         // Update HEAD
